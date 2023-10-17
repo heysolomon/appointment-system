@@ -5,7 +5,7 @@ import { BackgroundImage } from '@/assets/images'
 import Link from 'next/link'
 export default function Login() {
   return (
-    <div className='w-screen h-screen flex flex-col items-center justify-center bg-bg-dark_green-900 fixed'>
+    <div className='w-screen h-screen flex flex-col items-center justify-center bg-dark_green-900 fixed'>
       <form action="" className='w-[35%] bg-white shadow-md rounded-xl p-5 absolute z-50'>
         {/* title */}
         <div>
