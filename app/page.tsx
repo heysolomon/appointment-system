@@ -6,7 +6,6 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <div className='w-screen h-screen flex flex-col items-center justify-center bg-dark_green-900 fixed'>
-      <BackgroundImage />
       <form action="" className='w-[35%] bg-white shadow-md rounded-xl p-5 absolute z-50'>
         {/* title */}
         <div>

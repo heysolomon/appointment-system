@@ -6,7 +6,6 @@ import Link from 'next/link'
 export default function Login() {
   return (
     <div className='w-screen h-screen flex flex-col items-center justify-center bg-tea_green-700 fixed'>
-      <BackgroundImage />
       <form action="" className='w-[35%] bg-white shadow-md rounded-xl p-5 absolute z-50'>
         {/* title */}
         <div>
@@ -29,7 +28,7 @@ export default function Login() {
             <Link href='/forgot%20password' className='underline text-sm'>Forgot Password?</Link>
         </div>
 
-        <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md'>Sign Up</button>
+        <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md'>Sign In</button>
 
         {/* google login */}
         <div className='w-full mt-3'>

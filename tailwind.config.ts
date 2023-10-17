@@ -105,7 +105,7 @@ module.exports = {
         },
       },
       backgroundImage: {
-        img: ''
+        img: 'url(/public/images/background.png)',
       }
     },
   },
