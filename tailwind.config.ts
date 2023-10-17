@@ -104,6 +104,9 @@ module.exports = {
           900: "#a4fda4",
         },
       },
+      backgroundImage: {
+        img: ''
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
