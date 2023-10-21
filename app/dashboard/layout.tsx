@@ -1,4 +1,4 @@
-import { BackgroundImage } from '@/assets/images'
+import { BackgroundImage } from '@/public/assets/images'
 import { BsCalendar3Range } from 'react-icons/bs'
 import { MdEventRepeat } from 'react-icons/md'
 import React from 'react'
