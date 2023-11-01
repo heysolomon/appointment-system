@@ -1,7 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { AiOutlineLogin } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
-import { BackgroundImage } from '@/public/assets/images'
+import { BackgroundImage } from '@/public/assets/images/images'
 import Link from 'next/link'
 export default function Login() {
   return (

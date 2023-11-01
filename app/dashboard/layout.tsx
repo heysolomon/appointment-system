@@ -1,31 +1,34 @@
-import { BackgroundImage } from '@/public/assets/images'
-import { BsCalendar3Range } from 'react-icons/bs'
+"use client"
+
+import { BackgroundImage } from '@/public/assets/images/images'
 import { MdEventRepeat } from 'react-icons/md'
 import React from 'react'
 import Link from 'next/link'
+import { NsukLogo } from '@/public/assets/icons/icons'
+import { usePathname } from 'next/navigation'
 
 interface DLayout {
     children: React.ReactNode
 }
 
-const layout = ({ children }: DLayout) => {
+const Layout = ({ children }: DLayout) => {
+    const pathname = usePathname()
     return (
         <div className='w-screen h-screen flex flex-col items-center justify-center bg-tea_green-700 fixed'>
             <BackgroundImage />
-
             {/* nav */}
             <div className='w-[95%] h-[90%] bg-white absolute z-50 shadow-xl rounded-xl'>
                 <div className='h-20 border-b border-b-dark_green-900 flex items-center justify-between px-5 text-sm'>
-                    <BsCalendar3Range size={30} className="text-dark_green" />
+                    <NsukLogo />
 
                     <ul className='flex items-center text-dark_green'>
-                        <Link href='/dashboard' className='hover:underline mr-5'>
+                        <Link href='/dashboard' className={`hover:underline mr-5 ${pathname === "/dashboard" && "underline"}`}>
                             <li>Home</li>
                         </Link>
-                        <Link href='/dashboard/book appointment' className='hover:underline mr-5'>
+                        <Link href='/dashboard/book appointment' className={`hover:underline mr-5 ${pathname === "/dashboard/book%20appointment" && "underline"}`}>
                             <li>Book Appointment</li>
                         </Link>
-                        <Link href='/dashboard' className='hover:underline mr-5'>
+                        <Link href='/dashboard/account' className={`hover:underline mr-5 ${pathname === "/dashboard/account" && "underline"}`}>
                             <li>Account</li>
                         </Link>
 
@@ -43,4 +46,4 @@ const layout = ({ children }: DLayout) => {
     )
 }
 
-export default layout
+export default Layout
