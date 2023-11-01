@@ -1,3 +1,4 @@
+import UpcomingAppoinments from '@/components/admin/dashboard/upcoming_appointments/page'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import React from 'react'
 
@@ -9,7 +10,9 @@ const page = () => {
                     <TabsTrigger value="upcoming" className="px-5 text-sm">Upcoming Appointments</TabsTrigger>
                     <TabsTrigger value="canceled" className="px-5 text-sm">Canceled Appointments</TabsTrigger>
                 </TabsList>
-                <TabsContent value="upcoming" className=''>Upcoming appointments goes here</TabsContent>
+                <TabsContent value="upcoming" className=''>
+                    <UpcomingAppoinments />
+                </TabsContent>
                 <TabsContent value="canceled">canceled appointments goes here</TabsContent>
             </Tabs>
         </div>

@@ -63,7 +63,12 @@ const BookAppointment = () => {
                 </SelectTrigger>
                 <SelectContent className='bg-white'>
                   {times.map((item, i) => (
-                    <SelectItem key={i} value={item.time} className='hover:bg-dark_green-900 hover:cursor-pointer'>{item.time}</SelectItem>
+                    <SelectItem
+                      key={i}
+                      value={item.time}
+                      className='hover:bg-dark_green-900 hover:cursor-pointer'>
+                      {item.time}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
