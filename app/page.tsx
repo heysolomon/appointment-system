@@ -1,5 +1,3 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
-import { AiOutlineLogin } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import Link from 'next/link'
 import { NsukLogo } from '@/public/assets/icons/icons'

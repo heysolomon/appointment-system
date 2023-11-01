@@ -12,7 +12,7 @@ export function CalendarComponent() {
       mode="single"
       selected={date}
       onSelect={setDate}
-      className="rounded-md border shadow w-min text-dark_green-400"
+      className="w-min text-dark_green-400"
     />
   )
 }
