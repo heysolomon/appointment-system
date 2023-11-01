@@ -44,10 +44,6 @@ export default function Login() {
                   <p>Sign in with Google</p>
                 </button>
               </div>
-
-              <div className='w-full flex justify-center text-sm text-dark_green-300 my-3'>
-                <p>Dont have an account? <Link href='/' className='underline font-semibold'>Sign Up</Link></p>
-              </div>
             </div>
 
           </form>

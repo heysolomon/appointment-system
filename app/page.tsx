@@ -16,7 +16,7 @@ export default function Home() {
             <div className='flex items-center gap-5'>
               <NsukLogo />
               <div>
-                <h1 className="text-dark_green-500 font-semibold text-lg">Welcome to the VC appointment scheduling app</h1>
+                <h1 className="text-dark_green-500 font-semibold text-lg">Welcome to the VC appointment scheduling system</h1>
                 <p className='text-xs text-dark_green-600'>Please provide your details to sign up</p>
               </div>
             </div>
