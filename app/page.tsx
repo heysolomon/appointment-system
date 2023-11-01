@@ -1,17 +1,19 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { AiOutlineLogin } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
-import { BackgroundImage } from '@/public/assets/images/images'
 import Link from 'next/link'
+import { NsukLogo } from '@/public/assets/icons/icons'
 export default function Home() {
   return (
     <div className='w-screen h-screen flex flex-col items-center justify-center bg-dark_green-900 fixed'>
       <form action="" className='w-[35%] bg-white shadow-md rounded-xl p-5 absolute z-50'>
         {/* title */}
-        <div>
-          <AiOutlineLogin size={25} className="mb-1" />
-          <h1 className="text-dark_green-500 font-semibold text-xl">Sign Up</h1>
-          <p className='text-xs text-dark_green-600'>Please provide your details</p>
+        <div className='flex items-center gap-5'>
+          <NsukLogo />
+          <div>
+            <h1 className="text-dark_green-500 font-semibold text-sm">Welcome to the VC appointment scheduling app</h1>
+            <p className='text-xs text-dark_green-600'>Please provide your details to sign up</p>
+          </div>
         </div>
 
         {/* google login */}
@@ -38,7 +40,7 @@ export default function Home() {
             <input type="text" id='name' name="name" className="w-full h-[35px] border border-dark_green-900 focus:ring-1 focus:ring-dark_green-700 focus:outline-none pl-1 text-sm rounded-md" />
           </div>
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="user" className="text-sm font-semibold">Select user</label>
           <Select>
             <SelectTrigger className="w-full ring-dark_green-700" id='user'>
@@ -50,7 +52,7 @@ export default function Home() {
               <SelectItem value="visitor" className='hover:bg-dark_green-900 hover:cursor-pointer'>Visitor</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         <div className="mb-3">
           <label htmlFor="password" className="text-sm font-semibold">Password</label>

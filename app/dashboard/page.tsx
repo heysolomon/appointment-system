@@ -4,7 +4,7 @@ import React from 'react'
 const page = () => {
     return (
         <div className='p-10 h-full'>
-            <Tabs defaultValue="account" className="w-full">
+            <Tabs defaultValue="upcoming" className="w-full">
                 <TabsList>
                     <TabsTrigger value="upcoming" className="px-5 text-sm">Upcoming Appointments</TabsTrigger>
                     <TabsTrigger value="canceled" className="px-5 text-sm">Canceled Appointments</TabsTrigger>
