@@ -6,9 +6,10 @@ import { ColumnDef } from "@tanstack/react-table"
 // You can use a Zod schema here if you want.
 export type Appointments = {
   id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
   email: string
+  name: string
+  status: "approved" | "unapproved" | "cancelled"
+
 }
 
 export const columns: ColumnDef<Appointments>[] = [
@@ -21,7 +22,7 @@ export const columns: ColumnDef<Appointments>[] = [
     header: "Email",
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "name",
+    header: "Name",
   },
 ]

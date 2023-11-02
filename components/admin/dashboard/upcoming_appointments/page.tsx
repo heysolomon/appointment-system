@@ -6,9 +6,9 @@ async function getData(): Promise<Appointments[]> {
     return [
         {
             id: "728ed52f",
-            amount: 100,
-            status: "pending",
-            email: "m@example.com",
+            email: "peter@gmail.com",
+            name: "Peter Ayani",
+            status: "unapproved",
         },
         // ...
     ]
@@ -18,15 +18,15 @@ export default async function UpcomingAppoinments() {
     const data: Appointments[] = [
         {
             id: "728ed52f",
-            amount: 100,
-            status: "pending",
-            email: "m@example.com",
+            email: "peter@gmail.com",
+            name: "Peter Ayani",
+            status: "unapproved",
         },
         {
-            id: "489e1d42",
-            amount: 125,
-            status: "processing",
-            email: "example@gmail.com",
+            id: "728ed52f",
+            email: "john@gmail.com",
+            name: "John Saleh",
+            status: "unapproved",
         },
     ]
 

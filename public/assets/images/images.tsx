@@ -2,8 +2,13 @@ import image from './background.png'
 import animate from './image.svg'
 import Image from 'next/image'
 import authImage from "./Calendar-bro.svg"
+import noData from "./no-data.svg"
 
 import React from 'react'
+
+type TProps = {
+  className: string;
+}
 
 export const BackgroundImage = () => {
   return (
@@ -17,11 +22,15 @@ export const AuthImage = () => {
   )
 }
 
-
-
 export const AnimatedImage = () => {
   return (
     <Image src={animate} alt='animated picture' className='w-full' />
+  )
+}
+
+export const NoDataImage = (props: TProps) => {
+  return (
+    <Image src={noData} alt='no data' {...props} />
   )
 }
 
