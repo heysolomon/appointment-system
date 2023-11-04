@@ -9,7 +9,8 @@ const page = () => {
             <Tabs defaultValue="upcoming" className="w-full">
                 <TabsList>
                     <TabsTrigger value="create_event" className="px-5 text-sm">Created Events</TabsTrigger>
-                    <TabsTrigger value="upcoming" className="px-5 text-sm">Upcoming Appointments</TabsTrigger>
+                    <TabsTrigger value="requested" className="px-5 text-sm">Requested Appointments</TabsTrigger>
+                    <TabsTrigger value="upcoming" className="px-5 text-sm">Confirmed Appointments</TabsTrigger>
                     <TabsTrigger value="canceled" className="px-5 text-sm">Canceled Appointments</TabsTrigger>
                 </TabsList>
                 <TabsContent value="create_event" className=''>
