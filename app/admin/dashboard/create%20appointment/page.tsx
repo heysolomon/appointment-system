@@ -1,5 +1,6 @@
 
 import { CalendarComponent } from '@/components/Calender'
+import Spinner from '@/components/spinner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { AnimatedImage } from '@/public/assets/images/images'
 import React from 'react'
@@ -76,7 +77,7 @@ const BookAppointment = () => {
 
             <div className="mt-5">
               <button type='submit' className='w-full px-10 py-2 text-sm bg-tea_green-100 text-white rounded-md'>Create a booking</button>
-
+              
             </div>
           </div>
         </div>
