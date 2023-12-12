@@ -1,4 +1,4 @@
-import mongoose, { ConnectOptions, MongooseOptions } from "mongoose";
+import mongoose from "mongoose";
 
 // track the connection status
 let isConnected = false;
@@ -19,7 +19,13 @@ export const connectToDB = async () => {
         return;
     }
 
-    const options: ConnectOptions = {
+    type TConnectOptions = {
+        dbName: string;
+        useNewUrlParser: boolean;
+        useUnifiedTopology: boolean;
+    }
+
+    const options: TConnectOptions = {
         dbName: "appointment_management_system",
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -29,7 +35,9 @@ export const connectToDB = async () => {
         await mongoose.connect(mongodbUri, options as any)
 
         isConnected = true;
-    } catch (error) {
 
+        console.log('MONGODB connected')
+    } catch (error) {
+        console.log(error)
     }
 }
