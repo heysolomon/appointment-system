@@ -23,7 +23,7 @@ type TSignIn = {
     account: Account | null;
     profile?: Profile & { picture: string; } | undefined;
     email?: { verificationRequest?: boolean | undefined; } | undefined;
-    // credentials?: Record<T> | undefined;
+    credentials?: Record<> | undefined;
 }
 
 const handler = NextAuth({
@@ -35,27 +35,23 @@ const handler = NextAuth({
         } as TProviders)
     ],
     session: {
-        // Choose how you want to save the user session.
-        // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.
-        // If you use an `adapter` however, we default it to `"database"` instead.
-        // You can still force a JWT session by explicitly defining `"jwt"`.
-        // When using `"database"`, the session cookie will only contain a `sessionToken` value,
-        // which is used to look up the session in the database.
         strategy: "database",
-
-        // Seconds - How long until an idle session expires and is no longer valid.
         maxAge: 30 * 24 * 60 * 60, // 30 days
-
-        // Seconds - Throttle how frequently to write to database to extend a session.
-        // Use it to limit write operations. Set to 0 to always update the database.
-        // Note: This option is ignored if using JSON Web Tokens
         updateAge: 24 * 60 * 60, // 24 hours
-
-        // The session token is usually either a random UUID or string, however if you
-        // need a more customized session token string, you can define your own generate function.
         generateSessionToken: () => {
             return randomUUID?.() ?? randomBytes(32).toString("hex")
         }
+    },
+    cookies: {
+        sessionToken: {
+            name: `next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                path: '/',
+            },
+        },
     },
     callbacks: {
         async session({ session, token, user }: TSession) {
@@ -72,7 +68,14 @@ const handler = NextAuth({
 
             return session;
         },
-        async signIn({ profile }: TSignIn) {
+        async redirect({ url, baseUrl }) {
+            // Allows relative callback URLs
+            if (url.startsWith("/")) return `${baseUrl}${url}`
+            // Allows callback URLs on the same origin
+            else if (new URL(url).origin === baseUrl) return url
+            return baseUrl
+        },
+        async signIn({ account, profile, user, credentials }: TSignIn) {
             try {
                 await connectToDB();
 
