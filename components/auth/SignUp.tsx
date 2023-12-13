@@ -21,9 +21,9 @@ const SignUp = () => {
     }, [])
     return (
         <div className='bg-dark_green-900'>
-            <div className='w-screen max-w-[1378px] mx-auto h-screen grid grid-cols-2 bg-dark_green-900'>
+            <div className='max-w-[1378px] mx-auto h-screen overflow-hidden grid grid-cols-2 bg-dark_green-900'>
                 <div className='flex items-center justify-center h-full'>
-                    <AuthImage />
+                    <AuthImage className='w-full' />
                 </div>
                 <div className='w-full h-full flex items-center justify-center pr-5'>
                     <form action="" className='w-full bg-white shadow-md rounded-xl p-5'>

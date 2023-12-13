@@ -16,9 +16,9 @@ export const BackgroundImage = () => {
   )
 }
 
-export const AuthImage = () => {
+export const AuthImage = (props: TProps) => {
   return (
-    <Image src={authImage} alt='illustration' className='w-full' />
+    <Image src={authImage} alt='illustration' {...props} />
   )
 }
 
