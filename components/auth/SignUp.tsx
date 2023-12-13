@@ -59,7 +59,7 @@ const SignUp = () => {
                                 <p className='mx-3 text-xs text-dark_green-300'>OR</p>
                                 <div className='h-[1px] w-full bg-dark_green-900' />
                             </div>
-                            <div className='grid grid-cols-2 gap-x-3 mb-3'>
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-3'>
                                 <div className="">
                                     <label htmlFor="email" className="text-sm font-semibold">Email address</label>
                                     <input type="email" id='email' name="email" className="w-full h-[35px] border border-dark_green-900 focus:ring-1 focus:ring-dark_green-700 focus:outline-none pl-1 text-sm rounded-md" />
@@ -69,19 +69,6 @@ const SignUp = () => {
                                     <input type="text" id='name' name="name" className="w-full h-[35px] border border-dark_green-900 focus:ring-1 focus:ring-dark_green-700 focus:outline-none pl-1 text-sm rounded-md" />
                                 </div>
                             </div>
-                            {/* <div className="mb-3">
-          <label htmlFor="user" className="text-sm font-semibold">Select user</label>
-          <Select>
-            <SelectTrigger className="w-full ring-dark_green-700" id='user'>
-              <SelectValue placeholder="Select user" />
-            </SelectTrigger>
-            <SelectContent className='bg-white'>
-              <SelectItem value="staff" className='hover:bg-dark_green-900 hover:cursor-pointer'>Staff</SelectItem>
-              <SelectItem value="student" className='hover:bg-dark_green-900 hover:cursor-pointer'>Student</SelectItem>
-              <SelectItem value="visitor" className='hover:bg-dark_green-900 hover:cursor-pointer'>Visitor</SelectItem>
-            </SelectContent>
-          </Select>
-        </div> */}
 
                             <div className="mb-3">
                                 <label htmlFor="password" className="text-sm font-semibold">Password</label>
