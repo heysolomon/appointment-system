@@ -21,9 +21,12 @@ type TSession = {
 type TSignIn = {
     user: AdapterUser | NextAuthUser;
     account: Account | null;
-    profile?: Profile & { picture: string; } | undefined;
-    email?: { verificationRequest?: boolean | undefined; } | undefined;
-    credentials?: Record<> | undefined;
+    profile?: Profile & { picture: string } | undefined;
+    email?: { verificationRequest?: boolean | undefined } | undefined;
+    credentials?: {
+      username: string;
+      password: string;
+    } | undefined;
 }
 
 const handler = NextAuth({
@@ -46,8 +49,8 @@ const handler = NextAuth({
         sessionToken: {
             name: `next-auth.session-token`,
             options: {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                httpOnly: false,
+                secure: true,
                 sameSite: 'lax',
                 path: '/',
             },
@@ -55,18 +58,16 @@ const handler = NextAuth({
     },
     callbacks: {
         async session({ session, token, user }: TSession) {
-            if (session.user) {
-                if (!('id' in session.user)) {
-                    const sessionUser = await User.findOne({
-                        email: session.user.email,
-                    });
-
-                    const userId = sessionUser?._id?.toString() || '';
-                    session.user.id = userId;
-                }
-            }
-
-            return session;
+            if (session.user && !('id' in session.user)) {
+                const sessionUser = await User.findOne({
+                  email: session.user.email,
+                });
+            
+                const userId = sessionUser?._id?.toString() || '';
+                session.user.id = userId;
+              }
+            
+              return session;
         },
         async redirect({ url, baseUrl }) {
             // Allows relative callback URLs
@@ -79,11 +80,11 @@ const handler = NextAuth({
             try {
                 await connectToDB();
 
-                if (profile) {
+                if (profile && profile.email) {
                     // check if a user already exists
                     const userExists = await User.findOne({
                         email: profile.email,
-                    })
+                    });
 
                     // if not, create a new user
                     if (!userExists) {
@@ -91,16 +92,16 @@ const handler = NextAuth({
                             email: profile.email,
                             name: profile.name,
                             image: profile.picture,
-                        })
+                        });
                     }
                 }
                 return true;
             } catch (error) {
-                console.log(error);
-
+                console.log("Error checking if user exists: ", error.message);
                 return false;
             }
         }
+
     }
 
 })
