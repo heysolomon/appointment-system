@@ -11,7 +11,6 @@ type TProviders = {
     clientSecret: string;
 }
 
-// Define your custom session type
 type TSession = {
     session: Session;
     token: JWT;
@@ -47,7 +46,7 @@ const handler = NextAuth({
     },
     cookies: {
         sessionToken: {
-            name: `next-auth.session-token`,
+            name: `__Secret-next-auth.session-token`,
             options: {
                 httpOnly: false,
                 secure: true,
