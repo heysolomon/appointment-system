@@ -21,17 +21,17 @@ const SignUp = () => {
     }, [])
     return (
         <div className='bg-dark_green-900'>
-            <div className='max-w-[1378px] mx-auto h-screen overflow-hidden grid grid-cols-2 bg-dark_green-900'>
-                <div className='flex items-center justify-center h-full'>
+            <div className='max-w-[1378px] mx-auto h-screen overflow-hidden grid grid-cols-1 md:grid-cols-2 bg-dark_green-900 px-5 md:px-0'>
+                <div className='hidden md:flex items-center justify-center h-full'>
                     <AuthImage className='w-full' />
                 </div>
-                <div className='w-full h-full flex items-center justify-center pr-5'>
+                <div className='w-full h-full flex items-center justify-center md:pr-5'>
                     <form action="" className='w-full bg-white shadow-md rounded-xl p-5'>
                         {/* title */}
                         <div className='flex items-center gap-5'>
                             <NsukLogo />
                             <div>
-                                <h1 className="text-dark_green-500 font-semibold text-lg">Welcome to the VC appointment scheduling system</h1>
+                                <h1 className="text-dark_green-500 font-semibold text-md md:text-lg">Welcome to the VC appointment scheduling system</h1>
                                 <p className='text-xs text-dark_green-600'>Please provide your details to sign up</p>
                             </div>
                         </div>
@@ -40,13 +40,13 @@ const SignUp = () => {
                             {/* google login */}
                             <div className='w-full mt-10'>
                                 {providers && Object.values(providers).map(provider => (
-                                    <button 
-                                    type="button" 
-                                    key={provider.id}
-                                    onClick={() => {
-                                        signIn(provider.id, {callbackUrl: "http://localhost:3000/dashboard"});
-                                    }}
-                                    className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
+                                    <button
+                                        type="button"
+                                        key={provider.id}
+                                        onClick={() => {
+                                            signIn(provider.id, { callbackUrl: "http://localhost:3000/dashboard" });
+                                        }}
+                                        className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
                                         <FcGoogle size={20} className="mr-2" />
                                         <p>Sign up with Google</p>
                                     </button>
