@@ -4,8 +4,12 @@ import { FcGoogle } from 'react-icons/fc'
 import Link from 'next/link'
 import { NsukLogo } from '@/public/assets/icons/icons'
 import { AuthImage } from '@/public/assets/images/images'
+import { useSession } from 'next-auth/react'
 
 const LoginPage = () => {
+  const { data: session } = useSession();
+
+    console.log(session)
   return (
     <div className='bg-dark_green-900'>
       <div className='w-screen max-w-[1378px] mx-auto h-screen grid grid-cols-2 bg-dark_green-900'>

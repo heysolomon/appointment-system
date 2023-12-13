@@ -23,8 +23,8 @@ type TSignIn = {
     profile?: Profile & { picture: string } | undefined;
     email?: { verificationRequest?: boolean | undefined } | undefined;
     credentials?: {
-      username: string;
-      password: string;
+        username: string;
+        password: string;
     } | undefined;
 }
 
@@ -37,7 +37,7 @@ const handler = NextAuth({
         } as TProviders)
     ],
     session: {
-        strategy: "database",
+        strategy: "jwt",
         maxAge: 30 * 24 * 60 * 60, // 30 days
         updateAge: 24 * 60 * 60, // 24 hours
         generateSessionToken: () => {
@@ -59,14 +59,15 @@ const handler = NextAuth({
         async session({ session, token, user }: TSession) {
             if (session.user && !('id' in session.user)) {
                 const sessionUser = await User.findOne({
-                  email: session.user.email,
+                    email: session.user.email,
                 });
-            
+
                 const userId = sessionUser?._id?.toString() || '';
+                session.accessToken = token.accessToken;
                 session.user.id = userId;
-              }
-            
-              return session;
+            }
+
+            return session;
         },
         async redirect({ url, baseUrl }) {
             // Allows relative callback URLs
@@ -90,7 +91,6 @@ const handler = NextAuth({
                         await User.create({
                             email: profile.email,
                             name: profile.name,
-                            image: profile.picture,
                         });
                     }
                 }
