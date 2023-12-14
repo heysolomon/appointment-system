@@ -35,7 +35,7 @@ const Layout = ({ children }: DLayout) => {
 
                         </ul>
                         <button type="button">
-                            <CiMenuFries size={20} />
+                            <CiMenuFries size={25} />
                         </button>
                     </div>
 
