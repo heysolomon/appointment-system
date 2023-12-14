@@ -31,7 +31,7 @@ export default async function UpcomingAppoinments() {
     ]
 
     return (
-        <div className=" py-10">
+        <div className="py-4 md:py-10">
             <DataTable columns={columns} data={data} />
         </div>
     )
