@@ -7,8 +7,8 @@ import React from 'react'
 
 const BookAppointment = () => {
   return (
-    <div className='grid grid-cols-2 gap-4'>
-      <div className='border-r border-r-slate-400 h-full py-5 px-10'>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className='border-r border-r-slate-400 h-full py-5 px-10 hidden md:block'>
         <h1 className="text-dark_green-500 font-semibold text-xl">Book appointment with VC</h1>
         <p className='text-sm text-dark_green-600'>Please enter booking info</p>
         <div className='w-[80%] max-w-[500px]'>
@@ -17,7 +17,7 @@ const BookAppointment = () => {
       </div>
 
       <div className='p-5'>
-        <div className='grid grid-cols-2 gap-5 mt-5'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'>
           <div>
             <label htmlFor="description" className="text-sm font-semibold">Select Date</label>
             <CalendarComponent />

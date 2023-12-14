@@ -40,8 +40,8 @@ const BookAppointment = () => {
     },
   ]
   return (
-    <div className='grid grid-cols-2 gap-4'>
-      <div className='border-r border-r-dark_green-600 max-h-[97%] py-5 px-10'>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className='border-r border-r-dark_green-600 max-h-[97%] py-5 px-10 hidden md:block'>
         <h1 className="text-dark_green-500 font-semibold text-xl">Create an appointment schedule</h1>
         <p className='text-sm text-dark_green-600'>Please enter schedule details</p>
         <div className='w-[80%] max-w-[500px]'>
@@ -50,7 +50,11 @@ const BookAppointment = () => {
       </div>
 
       <div className='p-5'>
-        <div className='grid grid-cols-2 gap-5 mt-5'>
+        <div className='md:hidden'>
+          <h1 className="text-dark_green-500 font-semibold text-xl">Create an appointment schedule</h1>
+          <p className='text-sm text-dark_green-600'>Please enter schedule details</p>
+        </div>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'>
           <div>
             <label htmlFor="description" className="text-sm font-semibold">Select Available Dates</label>
             <CalendarComponent />
@@ -77,7 +81,7 @@ const BookAppointment = () => {
 
             <div className="mt-5">
               <button type='submit' className='w-full px-10 py-2 text-sm bg-tea_green-100 text-white rounded-md'>Create a booking</button>
-              
+
             </div>
           </div>
         </div>
