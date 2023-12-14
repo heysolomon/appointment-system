@@ -1,7 +1,6 @@
 "use client"
 
 import { BackgroundImage } from '@/public/assets/images/images'
-import { MdEventRepeat } from 'react-icons/md'
 import { CiMenuFries } from "react-icons/ci";
 import React from 'react'
 import Link from 'next/link'

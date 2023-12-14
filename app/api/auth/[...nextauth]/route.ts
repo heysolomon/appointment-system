@@ -33,7 +33,7 @@ const handler = NextAuth({
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-
+            redirectUri: process.env.REDIRECT_URI,
         } as TProviders)
     ],
     session: {
