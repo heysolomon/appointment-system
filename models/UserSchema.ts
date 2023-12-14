@@ -24,7 +24,7 @@ const UserSchema = new Schema<IUser>({
         type: String,
         // required: [true, 'Password is required']
     }
-})
+}, { timestamps: true })
 
 const User = models.User || model('User', UserSchema);
 

@@ -91,6 +91,7 @@ const handler = NextAuth({
                         await User.create({
                             email: profile.email,
                             name: profile.name,
+                            picture: profile.picture,
                         });
                     }
                 }
