@@ -2,6 +2,7 @@
 
 import { BackgroundImage } from '@/public/assets/images/images'
 import { MdEventRepeat } from 'react-icons/md'
+import { CiMenuFries } from "react-icons/ci";
 import React from 'react'
 import Link from 'next/link'
 import { NsukLogo } from '@/public/assets/icons/icons'
@@ -23,7 +24,7 @@ const Layout = ({ children }: DLayout) => {
                     <div className='h-20 border-b border-b-dark_green-900 flex items-center justify-between px-5 text-sm'>
                         <NsukLogo />
 
-                        <ul className='flex items-center text-dark_green'>
+                        <ul className='hidden md:flex items-center text-dark_green'>
                             <Link href='/dashboard' className={`hover:underline mr-5 ${pathname === "/dashboard" && "underline"}`}>
                                 <li>Home</li>
                             </Link>
@@ -33,6 +34,9 @@ const Layout = ({ children }: DLayout) => {
                             <li className='bg-tea_green-500 text-dark_green-200 border border-dark_green-500 py-2 px-5 rounded-xl flex items-center hover:shadow-md hover:cursor-pointer'>Logout</li>
 
                         </ul>
+                        <button type="button">
+                            <CiMenuFries size={20} />
+                        </button>
                     </div>
 
                     <div className='w-full h-full'>
