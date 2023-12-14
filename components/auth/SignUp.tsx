@@ -44,7 +44,7 @@ const SignUp = () => {
                                         type="button"
                                         key={provider.id}
                                         onClick={() => {
-                                            signIn(provider.id, { callbackUrl: "http://localhost:3000/dashboard" });
+                                            signIn(provider.id, { callbackUrl: process.env.NODE_ENV === "production" ? "https://appointment-system-ten.vercel.app/dashboard" : "http://localhost:3000/dashboard" });
                                         }}
                                         className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
                                         <FcGoogle size={20} className="mr-2" />
