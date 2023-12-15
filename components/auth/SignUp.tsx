@@ -85,21 +85,29 @@ const SignUp = () => {
                 method: 'POST',
                 body: JSON.stringify(values)
             })
-
-            console.log(res.body)
-            registerSuccess("message")
-            toast({
-                variant: "success",
-                title: "Successfull",
-                description: "User registered",
-            })
+            registerSuccess("User registered successfully")
+            if (res.ok) {
+                
+                toast({
+                    variant: "success",
+                    title: "Successfull",
+                    description: "User registered successfully",
+                })
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "error",
+                    description: "User already exists",
+                    action: <ToastAction altText="Try again">Try again</ToastAction>,
+                })
+            }
         } catch (err) {
             console.log(err)
-            registerFailed("failed")
+            registerFailed("Failed to register user")
             toast({
                 variant: "destructive",
                 title: "error",
-                description: "error",
+                description: "Failed to register user",
             })
         }
     }

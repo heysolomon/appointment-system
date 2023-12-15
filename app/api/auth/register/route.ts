@@ -3,7 +3,7 @@ import { connectToDB } from "@/utils/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
     try {
         await connectToDB()
 

@@ -19,6 +19,7 @@ const UserSchema = new Schema<IUser>({
     },
     picture: {
         type: String,
+        default: ""
     },
     password: {
         type: String,
