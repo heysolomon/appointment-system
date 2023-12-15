@@ -1,7 +1,11 @@
-import SignUp from '@/components/auth/SignUp'
+import SignUp from "@/components/auth/SignUp"
 
-export default function Home() {
+const page = () => {
   return (
-    <SignUp />
+    <div>
+      <SignUp />
+    </div>
   )
 }
+
+export default page

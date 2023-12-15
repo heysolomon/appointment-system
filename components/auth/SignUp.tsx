@@ -12,8 +12,9 @@ import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from "next-aut
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { FcGoogle } from "react-icons/fc"
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import Spinner from "../spinner";
 
 
 const SignUp = () => {
@@ -35,7 +36,7 @@ const SignUp = () => {
             .refine((data) => data === form.getValues().password, {
                 message: 'Passwords must match',
             })
-    });
+    }).required();
 
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
@@ -46,7 +47,7 @@ const SignUp = () => {
             confirmPassword: "",
         },
     })
-    
+
     type BuiltInProviderType = 'google' | 'facebook' | 'twitter';
 
     const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
@@ -58,19 +59,19 @@ const SignUp = () => {
     const [error, setError] = useState(false);
     const [message, setMessage] = useState('');
 
-    const checkStart = () => {
+    const registerStart = () => {
         setError(false);
         setSuccess(false);
         setLoading(true);
     };
 
-    const checkSuccess = (msg: string) => {
+    const registerSuccess = (msg: string) => {
         setSuccess(true);
         setLoading(false);
         setMessage(msg);
     };
 
-    const checkFailed = (msg: string) => {
+    const registerFailed = (msg: string) => {
         setLoading(false);
         setError(true);
         setMessage(msg);
@@ -78,15 +79,28 @@ const SignUp = () => {
 
 
     const registerUser = async (values: z.infer<typeof registerSchema>) => {
+        registerStart()
         try {
             const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 body: JSON.stringify(values)
             })
 
-            console.log(res)
+            console.log(res.body)
+            registerSuccess("message")
+            toast({
+                variant: "success",
+                title: "Successfull",
+                description: "User registered",
+            })
         } catch (err) {
             console.log(err)
+            registerFailed("failed")
+            toast({
+                variant: "destructive",
+                title: "error",
+                description: "error",
+            })
         }
     }
 
@@ -149,7 +163,7 @@ const SignUp = () => {
                                             <FormItem className="mt-3">
                                                 <Label htmlFor="email" className="text-sm font-semibold">Email address</Label>
                                                 <FormControl>
-                                                    <Input type="email" id='email' className="w-full h-[35px] pl-1 text-sm rounded-md" />
+                                                    <Input type="email" id='email' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
                                                 </FormControl>
                                                 <FormMessage className="text-red-500 text-xs" />
                                             </FormItem>
@@ -159,7 +173,7 @@ const SignUp = () => {
                                             <FormItem className="mt-3">
                                                 <Label htmlFor="name" className="text-sm font-semibold">Fullname</Label>
                                                 <FormControl>
-                                                    <Input type="text" id='name' className="w-full h-[35px] pl-1 text-sm rounded-md" />
+                                                    <Input type="text" id='name' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
                                                 </FormControl>
                                                 <FormMessage className="text-red-500 text-xs" />
                                             </FormItem>
@@ -171,7 +185,7 @@ const SignUp = () => {
                                         <FormItem className="mb-3">
                                             <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
                                             <FormControl>
-                                                <Input type="password" id='password' className="w-full h-[35px] pl-1 text-sm rounded-md" />
+                                                <Input type="password" id='password' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
                                             </FormControl>
                                             <FormMessage className="text-red-500 text-xs" />
                                         </FormItem>
@@ -181,12 +195,14 @@ const SignUp = () => {
                                         <FormItem className="mb-3">
                                             <Label htmlFor="confirmPassword" className="text-sm font-semibold">Confirm Password</Label>
                                             <FormControl>
-                                                <Input type="password" id='confirmPassword' className="w-full h-[35px] pl-1 text-sm rounded-md" />
+                                                <Input type="password" id='confirmPassword' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
                                             </FormControl>
                                             <FormMessage className="text-red-500 text-xs" />
                                         </FormItem>
                                     )} />
-                                    <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md mt-5'>Sign Up</button>
+                                    <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md mt-5 flex items-center justify-center'>
+                                        {loading ? <Spinner className="w-5 h-5" /> : "Sign Up"}
+                                    </button>
                                 </form>
                             </Form>
                             <div className='w-full flex justify-center text-sm text-dark_green-300 my-3'>
