@@ -17,7 +17,7 @@ const Layout = ({ children }: DLayout) => {
     const pathname = usePathname()
     return (
         <Protected>
-            <div className='w-screen h-screen flex flex-col items-center justify-center bg-tea_green-700 fixed'>
+            <div className='w-screen h-screen flex flex-col items-center justify-center bg-tea_green-700 md:fixed'>
                 <BackgroundImage />
                 {/* nav */}
                 <div className='w-[95%] h-[95%] md:h-[90%] bg-white absolute z-50 shadow-xl rounded-xl'>
