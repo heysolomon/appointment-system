@@ -1,10 +1,12 @@
 import User from "@/models/UserSchema";
 import { connectToDB } from "@/utils/db";
 import { randomBytes, randomUUID } from "crypto";
-import NextAuth, { Account, User as NextAuthUser, Profile, Session } from "next-auth"
+import NextAuth, { Account, Awaitable, User as NextAuthUser, Profile, RequestInternal, Session } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
-import GoogleProvider from "next-auth/providers/google"
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 
 type TProviders = {
     clientId: string;
@@ -34,7 +36,36 @@ const handler = NextAuth({
             clientId: process.env.GOOGLE_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             redirectUri: process.env.REDIRECT_URI,
-        } as TProviders)
+        } as TProviders),
+        CredentialsProvider({
+            name: "credentials",
+            credentials: {},
+            async authorize(credentials: Record<never, string> | undefined): Promise<NextAuthUser | null> {
+                
+                    const { email, password } = credentials;
+
+                try {
+                    await connectToDB()
+
+                    const user = await User.findOne({ email });
+
+                    if (!user) {
+                        return null;
+                    }
+
+                    const passwordMatch = await bcrypt.compare(password, user.password);
+
+                    if (!passwordMatch) {
+                        return null
+                    }
+
+                    return user;
+                } catch (err) {
+                    console.error(err);
+                    throw new Error("An error occurred while authorizing");
+                }
+            }
+        })
     ],
     session: {
         strategy: "jwt",

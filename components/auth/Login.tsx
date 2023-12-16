@@ -6,6 +6,16 @@ import { NsukLogo } from '@/public/assets/icons/icons'
 import { AuthImage } from '@/public/assets/images/images'
 import { ClientSafeProvider, LiteralUnion, getProviders, signIn, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
+import Spinner from '../spinner'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { ToastAction } from '../ui/toast'
+import { Schema, z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useToast } from '../ui/use-toast'
+import { redirect, useRouter } from 'next/navigation'
 
 const LoginPage = () => {
   type BuiltInProviderType = 'google' | "facebook" | "twitter";
@@ -14,7 +24,104 @@ const LoginPage = () => {
 
   const { data: session } = useSession();
 
-  console.log(session)
+  const { toast } = useToast()
+
+  const router = useRouter()
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const loginStart = () => {
+    setError(false);
+    setSuccess(false);
+    setLoading(true);
+  };
+
+  const loginSuccess = (msg: string) => {
+    setSuccess(true);
+    setLoading(false);
+    setMessage(msg);
+  };
+
+  const loginFailed = (msg: string) => {
+    setLoading(false);
+    setError(true);
+    setMessage(msg);
+  };
+
+  const loginSchema: Schema = z.object({
+    email: z.string().email('email is invalid'),
+    password: z
+      .string({
+        required_error: 'password is required',
+      })
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+        `Must Contain One Uppercase, One Lowercase,
+            One Number and one special case Character`
+      )
+      .min(8, 'password must be at least 8 characters long'),
+  }).required();
+
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+
+  const loginUser = async (values: z.infer<typeof loginSchema>) => {
+    loginStart()
+    try {
+      const res = await signIn("credentials", {
+        ...values,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        loginFailed('')
+        toast({
+          variant: "destructive",
+          title: "error",
+          description: "Invalid credentials",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        })
+
+        return;
+      }
+
+      toast({
+        variant: "success",
+        title: "Successfull",
+        description: "Login success",
+      })
+
+      loginSuccess('Login success')
+
+      setTimeout(() => {
+        router.replace('dashboard')
+      }, 2000)
+
+    } catch (err) {
+      loginFailed('')
+      console.error("Error during sign-in:", err);
+      toast({
+        variant: "destructive",
+        title: "error",
+        description: "error during sign-in",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+    }
+  };
+
+
+  const onSubmit = (values: z.infer<typeof loginSchema>) => {
+    loginUser(values);
+  }
 
   useEffect(() => {
     (async () => {
@@ -30,7 +137,7 @@ const LoginPage = () => {
           <AuthImage className='w-full' />
         </div>
         <div className='w-full h-full flex items-center justify-center md:pr-5'>
-          <form action="" className='w-full bg-white shadow-md rounded-xl p-5'>
+          <div className='w-full bg-white shadow-md rounded-xl p-5'>
             {/* title */}
             <div className='flex items-center gap-5'>
               <NsukLogo />
@@ -40,48 +147,63 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <div className='px-3'>
-              <div className="mb-3 mt-5">
-                <label htmlFor="email" className="text-sm font-semibold">Email address</label>
-                <input type="email" id='email' name="email" className="w-full h-[35px] border border-dark_green-900 focus:ring-1 focus:ring-dark_green-700 focus:outline-none pl-1 text-sm rounded-md" />
-              </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className='px-3'>
 
-              <div className="">
-                <label htmlFor="password" className="text-sm font-semibold">Password</label>
-                <input type="password" id='password' name="password" className="w-full h-[35px] border border-dark_green-900 focus:ring-1 focus:ring-dark_green-700 focus:outline-none pl-1 text-sm rounded-md" />
-              </div>
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem className="mb-3 mt-5">
+                    <Label htmlFor="email" className="text-sm font-semibold">Email address</Label>
+                    <FormControl>
+                      <Input type="email" id='email' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-xs" />
+                  </FormItem>
+                )} />
 
-              <div className='flex justify-end mt-3 mb-5'>
-                <Link href='/forgot%20password' className='underline text-sm'>Forgot Password?</Link>
-              </div>
 
-              <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md'>Sign In</button>
+                <FormField control={form.control} name="password" render={({ field }) => (
+                  <FormItem className="">
+                    <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
+                    <FormControl>
+                      <Input type="password" id='password' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-xs" />
+                  </FormItem>
+                )} />
 
-              {/* google login */}
-              <div className='w-full mt-3'>
-                {providers && Object.values(providers).map(provider => (
-                  <button
-                    type="button"
-                    key={provider.id}
-                    onClick={() => {
-                      signIn(provider.id, { callbackUrl: "http://localhost:3000/dashboard" });
-                    }}
-                    className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
-                    <FcGoogle size={20} className="mr-2" />
-                    <p>Sign in with Google</p>
-                  </button>
-                ))}
-              </div>
+                <div className='flex justify-end mt-3 mb-5'>
+                  <Link href='/forgot%20password' className='underline text-sm'>Forgot Password?</Link>
+                </div>
 
-              <div className='w-full flex justify-center text-sm text-dark_green-300 my-3'>
-                <p>Dont have an account? <Link href='/' className='underline font-semibold'>Sign Up</Link></p>
-              </div>
-            </div>
+                <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md mt-5 flex items-center justify-center'>
+                  {loading ? <Spinner className="w-5 h-5" /> : "Sign In"}
+                </button>
 
-          </form>
+                {/* google login */}
+                <div className='w-full mt-3'>
+                  {providers && Object.values(providers).map(provider =>
+                    provider.id === 'google' ? <button
+                      type="button"
+                      key={provider.id}
+                      onClick={() => {
+                        signIn(provider.id, { callbackUrl: "http://localhost:3000/dashboard" });
+                      }}
+                      className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
+                      <FcGoogle size={20} className="mr-2" />
+                      <p>Sign in with Google</p>
+                    </button> : null
+                  )}
+                </div>
+
+                <div className='w-full flex justify-center text-sm text-dark_green-300 my-3'>
+                  <p>Dont have an account? <Link href='/' className='underline font-semibold'>Sign Up</Link></p>
+                </div>
+              </form>
+            </Form>
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

@@ -18,6 +18,35 @@ import Spinner from "../spinner";
 
 
 const SignUp = () => {
+    type BuiltInProviderType = 'google' | 'facebook' | 'twitter';
+
+    const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
+
+    const { toast } = useToast()
+
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
+    const [message, setMessage] = useState('');
+
+    const registerStart = () => {
+        setError(false);
+        setSuccess(false);
+        setLoading(true);
+    };
+
+    const registerSuccess = (msg: string) => {
+        setSuccess(true);
+        setLoading(false);
+        setMessage(msg);
+    };
+
+    const registerFailed = (msg: string) => {
+        setLoading(false);
+        setError(true);
+        setMessage(msg);
+    };
+
     const registerSchema: Schema = z.object({
         email: z.string().email('email is invalid'),
         name: z.string().min(3, 'must contain 3 or more characters'),
@@ -48,35 +77,6 @@ const SignUp = () => {
         },
     })
 
-    type BuiltInProviderType = 'google' | 'facebook' | 'twitter';
-
-    const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
-
-    const { toast } = useToast()
-
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState(false);
-    const [message, setMessage] = useState('');
-
-    const registerStart = () => {
-        setError(false);
-        setSuccess(false);
-        setLoading(true);
-    };
-
-    const registerSuccess = (msg: string) => {
-        setSuccess(true);
-        setLoading(false);
-        setMessage(msg);
-    };
-
-    const registerFailed = (msg: string) => {
-        setLoading(false);
-        setError(true);
-        setMessage(msg);
-    };
-
 
     const registerUser = async (values: z.infer<typeof registerSchema>) => {
         registerStart()
@@ -87,7 +87,7 @@ const SignUp = () => {
             })
             registerSuccess("User registered successfully")
             if (res.ok) {
-                
+
                 toast({
                     variant: "success",
                     title: "Successfull",
@@ -144,18 +144,18 @@ const SignUp = () => {
                         <div className='px-3'>
                             {/* google login */}
                             <div className='w-full mt-10'>
-                                {providers && Object.values(providers).map(provider => (
-                                    <button
+                                {providers && Object.values(providers).map(provider =>
+                                    provider.id === 'google' ? <button
                                         type="button"
                                         key={provider.id}
                                         onClick={() => {
-                                            signIn(provider.id, { callbackUrl: process.env.NODE_ENV === "production" ? "https://appointment-system-ten.vercel.app/dashboard" : "http://localhost:3000/dashboard" });
+                                            signIn(provider.id, { callbackUrl: "http://localhost:3000/dashboard" });
                                         }}
                                         className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
                                         <FcGoogle size={20} className="mr-2" />
-                                        <p>Sign up with Google</p>
-                                    </button>
-                                ))}
+                                        <p>Sign in with Google</p>
+                                    </button> : null
+                                )}
                             </div>
 
                             {/* or divition */}
