@@ -5,6 +5,7 @@ export interface IUser extends Document {
     name: string;
     picture: string;
     password: string;
+    role: "admin" | "user";
 }
 
 const UserSchema = new Schema<IUser>({
@@ -23,7 +24,10 @@ const UserSchema = new Schema<IUser>({
     },
     password: {
         type: String,
-        // required: [true, 'Password is required']
+    },
+    role: {
+        type: String,
+        default: "user"
     }
 }, { timestamps: true })
 
