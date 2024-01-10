@@ -20,7 +20,7 @@ const page = () => {
                 <TabsContent value="create_event" className=''>
                     <div className='p-5'>
                         <h1 className="text-dark_green-500 font-semibold text-xl mb-5">No Events currently</h1>
-                        <NoDataImage className='w-[30%]' />
+                        <NoDataImage className='w-[20%]' />
                     </div>
                 </TabsContent>
                 <TabsContent value="upcoming" className=''>
