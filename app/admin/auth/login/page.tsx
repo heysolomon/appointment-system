@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { Schema, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Spinner from '@/components/spinner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -77,34 +77,23 @@ const LoginPage = () => {
   const loginAdmin = async (values: z.infer<typeof loginSchema>) => {
     loginStart()
     try {
-      const res = await signIn("credentials", {
-        ...values,
-        redirect: false,
+      const res = await fetch("/api/admin/auth", {
+        method: 'POST',
+        body: JSON.stringify(values)
       });
 
-      if (res?.error) {
-        loginFailed('')
-        toast({
-          variant: "destructive",
-          title: "error",
-          description: "Invalid credentials",
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        })
-
-        return;
-      }
+      const data = await res.json();
+      console.log(data)
 
       toast({
         variant: "success",
-        title: "Successfull",
-        description: "Login success",
+        title: "Login success",
+        description: data.message,
       })
 
       loginSuccess('Login success')
 
-      setTimeout(() => {
-        router.replace('dashboard')
-      }, 2000)
+        // router.push('/admin/dashboard')
 
     } catch (err) {
       loginFailed('')
