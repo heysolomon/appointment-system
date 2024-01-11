@@ -3,7 +3,7 @@
 import { Schema, z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { NsukLogo } from "@/public/assets/icons/icons"
@@ -15,6 +15,7 @@ import { FcGoogle } from "react-icons/fc"
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Spinner from "../spinner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/Select";
 
 
 const SignUp = () => {
@@ -50,6 +51,7 @@ const SignUp = () => {
     const registerSchema: Schema = z.object({
         email: z.string().email('email is invalid'),
         name: z.string().min(3, 'must contain 3 or more characters'),
+        userType: z.string(),
         password: z
             .string({
                 required_error: 'password is required',
@@ -72,6 +74,7 @@ const SignUp = () => {
         defaultValues: {
             email: "",
             name: "",
+            userType: "",
             password: "",
             confirmPassword: "",
         },
@@ -188,6 +191,30 @@ const SignUp = () => {
                                         )} />
 
                                     </div>
+
+                                    <FormField
+                                        control={form.control}
+                                        name="userType"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Select user</FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                        <SelectTrigger className="w-full ring-dark_green-700">
+                                                            <SelectValue placeholder="User" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent className='bg-white'>
+                                                        <SelectItem value="official" className='hover:bg-dark_green-900 hover:cursor-pointer'>Official</SelectItem>
+                                                        <SelectItem value="staff" className='hover:bg-dark_green-900 hover:cursor-pointer'>Staff</SelectItem>
+                                                        <SelectItem value="visitor" className='hover:bg-dark_green-900 hover:cursor-pointer'>Visitor</SelectItem>
+                                                        <SelectItem value="student" className='hover:bg-dark_green-900 hover:cursor-pointer'>Student</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
 
                                     <FormField control={form.control} name="password" render={({ field }) => (
                                         <FormItem className="mb-3">
