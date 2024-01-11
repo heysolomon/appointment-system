@@ -16,40 +16,20 @@ import { Label } from '@/components/ui/label'
 import { ToastAction } from '@/components/ui/toast'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { useToast } from '@/components/ui/use-toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { ReduxState } from '@/lib/redux'
+import { loginFailure, loginStart, loginSuccess } from '@/lib/redux/features/admin/adminSlice'
 
 const LoginPage = () => {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { toast } = useToast()
+
   type BuiltInProviderType = 'google' | "facebook" | "twitter";
 
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
+  const { loginLoading } = useSelector((state: ReduxState) => state.admin);
 
-  const { data: session } = useSession();
-
-  const { toast } = useToast()
-
-  const router = useRouter()
-
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
-  const [message, setMessage] = useState('');
-
-  const loginStart = () => {
-    setError(false);
-    setSuccess(false);
-    setLoading(true);
-  };
-
-  const loginSuccess = (msg: string) => {
-    setSuccess(true);
-    setLoading(false);
-    setMessage(msg);
-  };
-
-  const loginFailed = (msg: string) => {
-    setLoading(false);
-    setError(true);
-    setMessage(msg);
-  };
 
   const loginSchema: Schema = z.object({
     email: z.string().email('email is invalid'),
@@ -73,9 +53,8 @@ const LoginPage = () => {
     },
   })
 
-
   const loginAdmin = async (values: z.infer<typeof loginSchema>) => {
-    loginStart()
+    dispatch(loginStart())
     try {
       const res = await fetch("/api/admin/auth", {
         method: 'POST',
@@ -92,24 +71,23 @@ const LoginPage = () => {
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         })
 
-        loginFailed('')
+        dispatch(loginFailure(data.message))
       }
 
       if (res.ok) {
-        console.log(data.user)
         toast({
           variant: "success",
           title: "Login success",
           description: data.message,
         })
 
-        loginSuccess('Login success')
+        dispatch(loginSuccess(data.user))
 
         router.push('/admin/dashboard')
       }
 
     } catch (err) {
-      loginFailed('')
+      dispatch(loginFailure(data.message))
       console.error(err);
       toast({
         variant: "destructive",
@@ -178,7 +156,7 @@ const LoginPage = () => {
                 </div>
 
                 <button type='submit' className='w-full py-2 text-sm bg-tea_green-100 text-white rounded-md mt-5 flex items-center justify-center'>
-                  {loading ? <Spinner className="w-5 h-5" /> : "Sign In"}
+                  {loginLoading ? <Spinner className="w-5 h-5" /> : "Sign In"}
                 </button>
 
                 {/* google login */}
