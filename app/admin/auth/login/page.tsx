@@ -83,21 +83,34 @@ const LoginPage = () => {
       });
 
       const data = await res.json();
-      console.log(data)
 
-      toast({
-        variant: "success",
-        title: "Login success",
-        description: data.message,
-      })
+      if (!res.ok) {
+        toast({
+          variant: "destructive",
+          title: "error",
+          description: data.message,
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        })
 
-      loginSuccess('Login success')
+        loginFailed('')
+      }
+
+      if (res.ok) {
+        console.log(data.user)
+        toast({
+          variant: "success",
+          title: "Login success",
+          description: data.message,
+        })
+
+        loginSuccess('Login success')
 
         // router.push('/admin/dashboard')
+      }
 
     } catch (err) {
       loginFailed('')
-      console.error("Error during sign-in:", err);
+      console.error(err);
       toast({
         variant: "destructive",
         title: "error",
