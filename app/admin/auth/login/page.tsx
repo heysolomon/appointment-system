@@ -198,7 +198,7 @@ const LoginPage = () => {
                 </div>
 
                 <div className='w-full flex justify-center text-sm text-dark_green-300 my-3'>
-                  <p>Dont have an account? <Link href='/' className='underline font-semibold'>Sign Up</Link></p>
+                  <p>Dont have an account? <Link href='/admin/auth' className='underline font-semibold'>Sign Up</Link></p>
                 </div>
               </form>
             </Form>
