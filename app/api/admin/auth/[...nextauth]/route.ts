@@ -41,8 +41,8 @@ const handler = NextAuth({
             name: "credentials",
             credentials: {},
             async authorize(credentials: Record<never, string> | undefined): Promise<NextAuthUser | null> {
-                
-                    const { email, password } = credentials;
+
+                const { email, password } = credentials;
 
                 try {
                     await connectToDB()
@@ -51,6 +51,10 @@ const handler = NextAuth({
 
                     if (!user) {
                         return null;
+                    }
+
+                    if (user && user.role === "user") {
+                        return null
                     }
 
                     const passwordMatch = await bcrypt.compare(password, user.password);

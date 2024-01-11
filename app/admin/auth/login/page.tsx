@@ -60,16 +60,16 @@ const LoginPage = () => {
               {/* google login */}
               <div className='w-full mt-3'>
                 {providers && Object.values(providers).map(provider => (
-                  <button
+                  provider.id === 'google' ? <button
                     type="button"
                     key={provider.id}
                     onClick={() => {
-                      signIn(provider.id, { callbackUrl: "http://localhost:3000/dashboard" });
+                      signIn(provider.id, { callbackUrl: "http://localhost:3000/admin/dashboard" });
                     }}
                     className='flex items-center justify-center h-[35px]  border border-dark_green-900 text-xs rounded-md w-full'>
                     <FcGoogle size={20} className="mr-2" />
                     <p>Sign in with Google</p>
-                  </button>
+                  </button> : null
                 ))}
               </div>
 

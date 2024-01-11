@@ -21,7 +21,6 @@ const UserSchema = new Schema<IUser>({
     },
     userType: {
         type: String,
-        required: [true, 'User type is required']
     },
     picture: {
         type: String,
