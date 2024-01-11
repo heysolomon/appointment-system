@@ -87,7 +87,7 @@ const LoginPage = () => {
       }
 
     } catch (err) {
-      dispatch(loginFailure(data.message))
+      dispatch(loginFailure(""))
       console.error(err);
       toast({
         variant: "destructive",
