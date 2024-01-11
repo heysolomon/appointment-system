@@ -37,7 +37,5 @@ export async function POST(req: Request) {
             message: "Failed to register user"
         }, { status: 500 })
         throw new Error("Failed to register user")
-
-        return;
     }
 }
