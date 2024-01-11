@@ -105,7 +105,7 @@ const LoginPage = () => {
 
         loginSuccess('Login success')
 
-        // router.push('/admin/dashboard')
+        router.push('/admin/dashboard')
       }
 
     } catch (err) {
