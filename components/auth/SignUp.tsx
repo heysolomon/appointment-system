@@ -96,6 +96,8 @@ const SignUp = () => {
                     title: "Successfull",
                     description: "User registered successfully",
                 })
+
+                console.log(values)
             } else {
                 toast({
                     variant: "destructive",
@@ -197,7 +199,7 @@ const SignUp = () => {
                                         name="userType"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Select user</FormLabel>
+                                                <Label className="text-sm font-semibold">Select user</Label>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger className="w-full ring-dark_green-700">
@@ -217,7 +219,7 @@ const SignUp = () => {
                                     />
 
                                     <FormField control={form.control} name="password" render={({ field }) => (
-                                        <FormItem className="mb-3">
+                                        <FormItem className="my-3">
                                             <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
                                             <FormControl>
                                                 <Input type="password" id='password' className="w-full h-[35px] pl-1 text-sm rounded-md" {...field} />
