@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     try {
 
         await connectToDB();
-        
+
         const { date, time } = await req.json();
 
         console.log(req.json()); // This line might be unnecessary
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
                     { status: 400 }
                 );
             } else {
-                // If the time doesn't exist, push it to the array and save
+
                 existingEvent.availableTime.push(time);
                 await existingEvent.save();
                 return NextResponse.json(
