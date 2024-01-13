@@ -2,20 +2,66 @@ import { connectToDB } from "@/utils/db";
 import { NextResponse } from "next/server";
 import Event from "@/models/EventModel";
 
-export async function GET(req: Request) {
-    await connectToDB();
-
+export async function POST(req: Request) {
     try {
-        const allEvents = await Event.find();
+        await connectToDB();
 
-        return NextResponse.json({
-            events: allEvents,
-        });
+        const { date, time, userId, userRole } = await req.json();
+
+        // Find the event for the specified date
+        const existingEvent = await Event.findOne({ availableDate: date });
+
+        if (existingEvent) {
+            // Find the specific time slot
+            const selectedTime = existingEvent.availableTime.find(
+                (eventTime: { time: any; }) => eventTime.time === time
+            );
+
+            if (selectedTime) {
+                // Check if the time slot is already booked
+                if (selectedTime.isBooked) {
+                    return NextResponse.json(
+                        {
+                            message: "Time slot is already booked",
+                        },
+                        { status: 400 }
+                    );
+                } else {
+                    // Update the time slot with booking details
+                    selectedTime.userId = userId;
+                    selectedTime.userRole = userRole;
+                    selectedTime.isBooked = true;
+
+                    await existingEvent.save();
+
+                    return NextResponse.json(
+                        {
+                            message: "Event successfully booked",
+                        },
+                        { status: 200 }
+                    );
+                }
+            } else {
+                return NextResponse.json(
+                    {
+                        message: "Invalid time slot",
+                    },
+                    { status: 400 }
+                );
+            }
+        } else {
+            return NextResponse.json(
+                {
+                    message: "Event not found for the specified date",
+                },
+                { status: 404 }
+            );
+        }
     } catch (err) {
-        console.error("Error retrieving events:", err);
+        console.error("Error booking event:", err);
         return NextResponse.json(
             {
-                message: "Failed to retrieve events",
+                message: "Failed to book event",
             },
             { status: 500 }
         );
