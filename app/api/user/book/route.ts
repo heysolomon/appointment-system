@@ -1,12 +1,25 @@
 import { connectToDB } from "@/utils/db";
 import { NextResponse } from "next/server";
 import Event from "@/models/EventModel";
+import User from "@/models/UserSchema";
 
 export async function POST(req: Request) {
     try {
         await connectToDB();
 
         const { date, time, userId, userRole } = await req.json();
+
+        // Check if the user exists in the User collection
+        const userExists = await User.exists({ _id: userId });
+
+        if (!userExists) {
+            return NextResponse.json(
+                {
+                    message: "User not found",
+                },
+                { status: 404 }
+            );
+        }
 
         // Find the event for the specified date
         const existingEvent = await Event.findOne({ availableDate: date });
