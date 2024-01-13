@@ -1,47 +1,61 @@
-import User from "@/models/UserSchema";
 import { connectToDB } from "@/utils/db";
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
+import Event from "@/models/EventModel";
 
 export async function POST(req: Request) {
+
     try {
-        await connectToDB()
 
-        const { date, time } = await req.json()
+        await connectToDB();
+        
+        const { date, time } = await req.json();
 
-        const userExists = await User.findOne({ email });
+        console.log(req.json()); // This line might be unnecessary
 
-        if (!userExists) {
-            return NextResponse.json({
-                message: "Invalid credentials"
-            }, { status: 400 });
-        }
+        const existingEvent = await Event.findOne({ availableDate: date });
 
-        if (userExists.role === "user") {
-            return NextResponse.json({
-                message: "Invalid credentials"
-            }, { status: 400 });
-        }
-
-        const passwordMatch = await bcrypt.compare(password, userExists.password);
-
-        if (!passwordMatch) {
-            return NextResponse.json({
-                message: "Invalid credentials"
-            }, { status: 400 });
-        }
-
-        return NextResponse.json({
-            message: "User registered",
-            user: {
-                email: userExists.email,
-                name: userExists.name,
+        if (existingEvent) {
+            // Use array.includes() to check if the time already exists in availableTime
+            if (existingEvent.availableTime.includes(time)) {
+                return NextResponse.json(
+                    {
+                        message: "Time already created",
+                    },
+                    { status: 400 }
+                );
+            } else {
+                // If the time doesn't exist, push it to the array and save
+                existingEvent.availableTime.push(time);
+                await existingEvent.save();
+                return NextResponse.json(
+                    {
+                        message: "Event successfully created",
+                    },
+                    { status: 201 }
+                );
             }
-        }, { status: 200 })
+        } else {
+            // If the date doesn't exist, create a new event
+            const newEvent = new Event({
+                availableDate: date,
+                availableTime: [time],
+            });
+
+            await Event.create(newEvent);
+            return NextResponse.json(
+                {
+                    message: "Event successfully created",
+                },
+                { status: 201 }
+            );
+        }
     } catch (err) {
-        NextResponse.json({
-            message: "Invalid credentials"
-        }, { status: 500 })
-        throw new Error("Invalid credentials")
+        console.error("Error creating event:", err);
+        return NextResponse.json(
+            {
+                message: "Failed to create event",
+            },
+            { status: 500 }
+        );
     }
 }

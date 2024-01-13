@@ -1,8 +1,9 @@
 import { Document, Schema, model, models } from "mongoose";
 
+// Assuming you want availableTime to be an array of strings representing time
 export interface IEvent extends Document {
-    availableDate: Date;
-    availableTime: Date;
+    availableDate: string;
+    availableTime: string[];
     isBooked: boolean;
     isConfirmed: boolean;
     isCanceled: boolean;
@@ -10,11 +11,12 @@ export interface IEvent extends Document {
 
 const EventSchema = new Schema<IEvent>({
     availableDate: {
-        type: Date,
+        type: String,
+        unique: true,
         required: [true, 'date is required']
     },
     availableTime: {
-        type: Date,
+        type: [String], // Change to [Date] if you want to store time as Date objects
         required: [true, 'time required is required']
     },
     isBooked: {
@@ -33,5 +35,3 @@ const EventSchema = new Schema<IEvent>({
 const Event = models.Event || model('Event', EventSchema);
 
 export default Event;
-
-
