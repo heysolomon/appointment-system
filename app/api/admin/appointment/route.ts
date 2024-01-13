@@ -3,20 +3,20 @@ import { NextResponse } from "next/server";
 import Event from "@/models/EventModel";
 
 export async function POST(req: Request) {
-
     try {
-
         await connectToDB();
 
         const { date, time } = await req.json();
 
-        console.log(req.json()); // This line might be unnecessary
-
         const existingEvent = await Event.findOne({ availableDate: date });
 
         if (existingEvent) {
-            // Use array.includes() to check if the time already exists in availableTime
-            if (existingEvent.availableTime.includes(time)) {
+            // Check if the time already exists in availableTime
+            const existingTime = existingEvent.availableTime.find(
+                (eventTime: { time: any; }) => eventTime.time === time
+            );
+
+            if (existingTime) {
                 return NextResponse.json(
                     {
                         message: "Time already created",
@@ -24,9 +24,12 @@ export async function POST(req: Request) {
                     { status: 400 }
                 );
             } else {
+                existingEvent.availableTime.push({
+                    time,
+                });
 
-                existingEvent.availableTime.push(time);
                 await existingEvent.save();
+
                 return NextResponse.json(
                     {
                         message: "Event successfully created",
@@ -38,7 +41,11 @@ export async function POST(req: Request) {
             // If the date doesn't exist, create a new event
             const newEvent = new Event({
                 availableDate: date,
-                availableTime: [time],
+                availableTime: [
+                    {
+                        time,
+                    },
+                ],
             });
 
             await Event.create(newEvent);
@@ -54,6 +61,26 @@ export async function POST(req: Request) {
         return NextResponse.json(
             {
                 message: "Failed to create event",
+            },
+            { status: 500 }
+        );
+    }
+}
+
+export async function GET(req: Request) {
+    await connectToDB();
+
+    try {
+        const allEvents = await Event.find();
+
+        return NextResponse.json({
+            events: allEvents,
+        });
+    } catch (err) {
+        console.error("Error retrieving events:", err);
+        return NextResponse.json(
+            {
+                message: "Failed to retrieve events",
             },
             { status: 500 }
         );
