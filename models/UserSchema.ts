@@ -6,7 +6,7 @@ export interface IUser extends Document {
     userType: string;
     picture: string;
     password: string;
-    role: "admin" | "user";
+    role: string;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -31,7 +31,7 @@ const UserSchema = new Schema<IUser>({
     },
     role: {
         type: String,
-        default: "user"
+        default: "student"
     }
 }, { timestamps: true })
 
