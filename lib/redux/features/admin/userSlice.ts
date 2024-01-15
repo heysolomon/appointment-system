@@ -1,31 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const lecturerSlice = createSlice({
-    name: 'users',
-    initialState: {
-        users: [],
-        isLoading: false,
-        error: false,
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {
+    userData: null,
+    loginLoading: false,
+    loginSucc: false,
+    loginError: false,
+    loginErrorMessage: '',
+    registerLoading: false,
+    registerSucc: false,
+    registerError: false,
+    registerErrorMessage: '',
+  },
+  reducers: {
+    loginStart: (state: { loginLoading: boolean; loginSucc: boolean; }) => {
+      state.loginLoading = true;
+      state.loginSucc = false;
     },
-    reducers: {
-        getUsersStart: (state) => {
-            state.isLoading = true;
-        },
-        getUsersSuccess: (state, action) => {
-            state.users = action.payload;
-            state.error = false;
-            state.isLoading = false;
-        },
-        getUsersFailure: (state) => {
-            state.isLoading = false;
-            state.error = true;
-        },
+    loginSuccess: (state: { userData: any; loginSucc: boolean; loginError: boolean; loginLoading: boolean; }, action: { payload: any; }) => {
+      state.userData = action.payload;
+      state.loginSucc = true;
+      state.loginError = false;
+      state.loginLoading = false;
     },
+    loginFailure: (state: { userData: null; loginErrorMessage: any; loginLoading: boolean; loginError: boolean; }, action: { payload: any; }) => {
+      state.userData = null;
+      state.loginErrorMessage = action.payload;
+      state.loginLoading = false;
+      state.loginError = true;
+    },
+  },
 });
 
-export default lecturerSlice.reducer;
+export default userSlice.reducer;
 export const {
-    getUsersStart,
-    getUsersSuccess,
-    getUsersFailure
-} = lecturerSlice.actions;
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} = userSlice.actions;

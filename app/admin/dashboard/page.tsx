@@ -8,7 +8,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Dashboard = () => {
-    const { adminData } = useSelector((state: ReduxState) => state.admin);
+    const { userData } = useSelector((state: ReduxState) => state.user);
     const { events, upcomingEvent } = useSelector((state: ReduxState) => state.events);
 
     const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const Dashboard = () => {
     return (
         <div className='p-5 md:p-10 h-max'>
             <div>
-                <h1 className="text-dark_green-500 font-semibold text-lg">Welcome Back {adminData?.name}</h1>
+                <h1 className="text-dark_green-500 font-semibold text-lg">Welcome Back {userData?.name}</h1>
                 <p className='text-[10px] md:text-xs text-dark_green-600'>Efficiently manage your schedule with visitors on our secure dashboard.</p>
             </div>
             <Tabs defaultValue="upcoming" className="w-full h-max mt-5">
@@ -86,14 +86,22 @@ const Dashboard = () => {
                                 <TableBody>
                                     {events.map((event) => {
                                         const dateObject = new Date(event.availableDate);
-                                        console.log(dateObject)
+
+                                        const options = {
+                                          year: 'numeric',
+                                          month: 'long',
+                                          day: 'numeric',
+                                          timeZone: 'UTC', // Replace 'your-time-zone' with the desired time zone
+                                        };
+
+                                        const formattedDate = dateObject.toLocaleString('en-US', options);
                                         return (
                                             <TableRow key={event._id}>
-                                                <TableCell className="font-medium">{dateObject.toDateString()}</TableCell>
+                                                <TableCell className="font-medium">{formattedDate}</TableCell>
                                                 <TableCell>
                                                     {event.availableTime.map((time) => {
                                                         const dateObjectTime = new Date(time.time)
-                                                        const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+                                                        const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
                                                         const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
                                                         return (
                                                             formattedTime + ", "
@@ -121,13 +129,25 @@ const Dashboard = () => {
                             <TableBody>
                                 {upcomingEvent.map((event) => {
                                     const dateObject = new Date(event.availableDate);
+
+                                    const options = {
+                                      year: 'numeric',
+                                      month: 'long',
+                                      day: 'numeric',
+                                      timeZone: 'UTC', // Replace 'your-time-zone' with the desired time zone
+                                    };
+                                    
+                                    const formattedDate = dateObject.toLocaleString('en-US', options);
                                     return (
                                         <TableRow key={event._id}>
-                                            <TableCell className="font-medium">{dateObject.toDateString()}</TableCell>
+                                            <TableCell className="font-medium">{formattedDate}</TableCell>
                                             {event.availableTime.map((time) => {
-                                                const dateObjectTime = new Date(time.time)
-                                                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
-                                                const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
+
+                                                console.log(time.time)
+                                                const dateObject = new Date(time.time);
+
+                                                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
+                                                const formattedTime = dateObject.toLocaleTimeString('en-US', timeOptions);
 
                                                 return (
                                                     <TableCell key={event._id} className='text-xs'>

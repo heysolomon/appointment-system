@@ -18,7 +18,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { useToast } from '@/components/ui/use-toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReduxState } from '@/lib/redux'
-import { loginFailure, loginStart, loginSuccess } from '@/lib/redux/features/admin/adminSlice'
+import { loginFailure, loginStart, loginSuccess } from '@/lib/redux/features/admin/userSlice'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -28,7 +28,7 @@ const LoginPage = () => {
   type BuiltInProviderType = 'google' | "facebook" | "twitter";
 
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
-  const { loginLoading } = useSelector((state: ReduxState) => state.admin);
+  const { loginLoading } = useSelector((state: ReduxState) => state.user);
 
 
   const loginSchema: Schema = z.object({

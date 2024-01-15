@@ -42,6 +42,15 @@ const eventSlice = createSlice({
         createEventsFailure: (state) => {
             state.isLoading = false;
         },
+        bookEventStart: (state) => {
+            state.isLoading = true;
+        },
+        bookEventSuccess: (state) => {
+            state.isLoading = false;
+        },
+        bookEventFailure: (state) => {
+            state.isLoading = false;
+        },
     },
 });
 
@@ -55,5 +64,8 @@ export const {
     getUpcomingEventsFailure,
     createEventsStart,
     createEventsSuccess,
-    createEventsFailure
+    createEventsFailure,
+    bookEventStart,
+    bookEventSuccess,
+    bookEventFailure
 } = eventSlice.actions;

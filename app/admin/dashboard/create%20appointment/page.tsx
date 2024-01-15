@@ -1,6 +1,5 @@
 'use client'
 
-import { CalendarComponent } from '@/components/Calender'
 import Spinner from '@/components/spinner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -191,43 +190,6 @@ const BookAppointment = () => {
 
         </form>
       </Form>
-      <div className='p-5'>
-        <div className='md:hidden'>
-          <h1 className="text-dark_green-500 font-semibold text-xl">Create an appointment schedule</h1>
-          <p className='text-sm text-dark_green-600'>Please enter schedule details</p>
-        </div>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 lg:max-h-[80%] md:overflow-y-auto lg:overflow-y-hidden'>
-          <div>
-            <label htmlFor="description" className="text-sm font-semibold">Select Available Dates</label>
-
-          </div>
-          <div className="mb-3">
-            <div className="mb-3">
-              <label htmlFor="user" className="text-sm font-semibold">Select available times</label>
-              <Select>
-                <SelectTrigger className="w-full ring-dark_green-700" id='user'>
-                  <SelectValue placeholder="Select time" />
-                </SelectTrigger>
-                <SelectContent className='bg-white'>
-                  {times.map((item, i) => (
-                    <SelectItem
-                      key={i}
-                      value={item.value}
-                      className='hover:bg-dark_green-900 hover:cursor-pointer'>
-                      {item.time}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="mt-5">
-              <button type='submit' className='w-full px-10 py-2 text-sm bg-tea_green-100 text-white rounded-md'>Create a booking</button>
-
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

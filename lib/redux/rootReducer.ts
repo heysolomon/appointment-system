@@ -1,21 +1,19 @@
-import adminSlice from "./features/admin/adminSlice";
+import adminSlice from "./features/admin/userSlice";
 import { combineReducers } from '@reduxjs/toolkit';
-import lecturerSlice from "./features/admin/userSlice";
 import { persistReducer } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
 import eventSlice from "./features/admin/eventSlice";
 
-const persistAdmin = {
-  key: 'admin',
+const persistUser = {
+  key: 'user',
   storage,
-  whitelist: ['adminData'],
+  whitelist: ['userData'],
 };
 
-const persistedAdmin = persistReducer(persistAdmin, adminSlice);
+const persistedUser = persistReducer(persistUser, adminSlice);
 
 export const reducer = combineReducers({
-  admin: persistedAdmin,
-  user: lecturerSlice,
+  user: persistedUser,
   events: eventSlice,
 })
 
