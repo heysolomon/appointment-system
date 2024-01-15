@@ -34,20 +34,6 @@ const adminSlice = createSlice({
     setToken: (state: { adminToken: any; }, action: { payload: any; }) => {
       state.adminToken = action.payload;
     },
-    reset: (state: { loginLoading: boolean; loginSucc: boolean; loginError: boolean; loginErrorMessage: string; registerLoading: boolean; registerSucc: boolean; registerError: boolean; registerErrorMessage: string; }) => {
-      state.loginLoading = false;
-      state.loginSucc = false;
-      state.loginError = false;
-      state.loginErrorMessage = '';
-      state.registerLoading = false;
-      state.registerSucc = false;
-      state.registerError = false;
-      state.registerErrorMessage = '';
-    },
-    resetData: (state: { adminData: null; adminToken: null; }) => {
-      state.adminData = null;
-      state.adminToken = null;
-    },
   },
 });
 
@@ -57,6 +43,4 @@ export const {
   loginSuccess,
   loginFailure,
   setToken,
-  resetData,
-  reset,
 } = adminSlice.actions;

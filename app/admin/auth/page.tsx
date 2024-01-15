@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import Spinner from "@/components/spinner";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
     type BuiltInProviderType = 'google' | 'facebook' | 'twitter';
@@ -23,6 +24,7 @@ const SignUp = () => {
     const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
 
     const { toast } = useToast()
+    const router = useRouter()
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -100,6 +102,8 @@ const SignUp = () => {
                     description: "user already exists",
                     action: <ToastAction altText="Try again">Try again</ToastAction>,
                 })
+                
+                router.push("/admin/auth/login")
             }
         } catch (err) {
             console.log(err)

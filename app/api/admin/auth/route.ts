@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({
-            message: "User registered",
+            message: "Please wait, you will be redirected to your dashboard",
             user: {
                 email: userExists.email,
                 name: userExists.name,
