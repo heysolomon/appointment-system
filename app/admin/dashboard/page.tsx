@@ -1,6 +1,7 @@
 'use client'
 
 import UpcomingAppoinments from '@/components/dashboard/upcoming_appointments/page'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ReduxState } from '@/lib/redux'
 import { getEventsFailure, getEventsStart, getEventsSuccess } from '@/lib/redux/features/admin/eventSlice'
@@ -20,9 +21,9 @@ const Dashboard = () => {
             try {
                 const res = await fetch('/api/admin/appointment', {
                     method: 'GET',
-                  })
+                })
 
-                  const data = await res.json();
+                const data = await res.json();
 
                 dispatch(getEventsSuccess(data.events))
             } catch (err) {
@@ -46,8 +47,38 @@ const Dashboard = () => {
                 </TabsList>
                 <TabsContent value="create_event" className=''>
                     <div className='p-5'>
-                        <h1 className="text-dark_green-500 font-semibold text-xl mb-5">No Events currently</h1>
-                        <NoDataImage className='w-[20%]' />
+                        {
+                            events.length === 0 ? <h1 className="text-dark_green-500 font-semibold text-xl mb-5">No Events currently</h1> : <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[200px]">Date</TableHead>
+                                        <TableHead>Available Times</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {events.map((event) => {
+                                        const dateObject = new Date(event.availableDate);
+                                        console.log(dateObject)
+                                        return (
+                                            <TableRow key={event._id}>
+                                                <TableCell className="font-medium">{dateObject.toDateString()}</TableCell>
+                                                <TableCell>
+                                                    {event.availableTime.map((time) => {
+                                                        const dateObjectTime = new Date(time.time)
+                                                        const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+                                                        const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
+                                                        return (
+                                                            formattedTime + ", "
+                                                        )
+                                                    })}
+                                                </TableCell>
+                                            </TableRow>
+
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        }
                     </div>
                 </TabsContent>
                 <TabsContent value="upcoming" className=''>
