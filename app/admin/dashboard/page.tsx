@@ -91,7 +91,7 @@ const Dashboard = () => {
                                           year: 'numeric',
                                           month: 'long',
                                           day: 'numeric',
-                                          timeZone: 'UTC', // Replace 'your-time-zone' with the desired time zone
+                                          timeZone: 'Africa/Lagos', // Replace 'your-time-zone' with the desired time zone
                                         };
 
                                         const formattedDate = dateObject.toLocaleString('en-US', options);
@@ -134,7 +134,7 @@ const Dashboard = () => {
                                       year: 'numeric',
                                       month: 'long',
                                       day: 'numeric',
-                                      timeZone: 'UTC', // Replace 'your-time-zone' with the desired time zone
+                                      timeZone: 'Africa/Lagos', // Replace 'your-time-zone' with the desired time zone
                                     };
                                     
                                     const formattedDate = dateObject.toLocaleString('en-US', options);

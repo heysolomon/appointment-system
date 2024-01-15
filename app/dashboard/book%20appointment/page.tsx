@@ -5,23 +5,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Calendar } from '@/components/ui/calendar'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { AnimatedImage } from '@/public/assets/images/images'
-import React from 'react'
+import React, { useState } from 'react'
 import { Schema, z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toast } from '@/components/ui/use-toast'
-import { bookEventFailure, bookEventStart, bookEventSuccess } from '@/lib/redux/features/admin/eventSlice'
 import { useSession } from 'next-auth/react'
-import { ReduxState } from '@/lib/redux'
 import Spinner from '@/components/spinner'
 
 const BookAppointment = () => {
   const dispatch = useDispatch()
 
   const { data: session } = useSession();
-  const { isLoading } = useSelector((state: ReduxState) => state.events);
-
+  const [loading, setLoading] = useState(false);
   type TTime = {
     time: string;
     value: string;
@@ -78,21 +75,33 @@ const BookAppointment = () => {
     resolver: zodResolver(bookEventSchema),
     defaultValues: {
       date: new Date(),
-      name: "",
+      time: "",
       userId: session?.user?.id,
     },
   })
 
   const bookEvent = async (values: z.infer<typeof bookEventSchema>) => {
-    dispatch(bookEventStart())
+    const dateObject = new Date(values.date);
+    setLoading(true)
+
+    const options = { timeZone: 'Africa/Lagos', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = dateObject.toLocaleDateString('en-US', options);
+
+    const newValues = {
+      ...values,
+      date: formattedDate
+    }
+
+    console.log(newValues)
+
     try {
       const res = await fetch('/api/user/book', {
         method: 'POST',
-        body: JSON.stringify(values)
+        body: JSON.stringify(newValues)
       })
       const data = await res.json();
       if (res.ok) {
-        dispatch(bookEventSuccess())
+        setLoading(false)
 
         toast({
           variant: "success",
@@ -102,21 +111,18 @@ const BookAppointment = () => {
       }
 
       if (!res.ok) {
+        setLoading(false)
         toast({
           variant: "destructive",
           title: "error",
           description: data.message,
-      })
+        })
       }
-
-
-
-
 
     } catch (err) {
       console.log(err)
 
-      dispatch(bookEventFailure())
+      setLoading(false)
       console.log(err)
       toast({
         variant: "destructive",
@@ -195,7 +201,7 @@ const BookAppointment = () => {
               <div className="mt-5">
                 <button type='submit' className='w-full px-10 py-2 text-sm bg-tea_green-100 text-white rounded-md flex items-center justify-center'>
                   {
-                    isLoading ? <Spinner className='w-5 h-5' /> : "Create a booking"
+                    loading ? <Spinner className='w-5 h-5' /> : "Book an appointment"
                   }
                 </button>
               </div>

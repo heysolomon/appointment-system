@@ -4,7 +4,6 @@ import Event, { IEvent } from "@/models/EventModel";
 import { sendEmail } from "@/utils/email";
 import User from "@/models/UserSchema";
 
-// Function to find the next available time for a user
 const findNextAvailableTime = async (time: string, date: string, lowerPriorityUser: { _id: any; role: any; name: any; email: any; }) => {
     const existingEvent = await Event.findOne({ availableDate: date });
 
@@ -13,28 +12,22 @@ const findNextAvailableTime = async (time: string, date: string, lowerPriorityUs
     availableTimes.sort((a: { time: string | number | Date; }, b: { time: string | number | Date; }) => new Date(a.time) - new Date(b.time));
 
     const nextAvailableTimes = availableTimes[0];
+    console.log("Next Available Time", nextAvailableTimes)
 
     if (nextAvailableTimes) {
-        await Event.updateOne(
-            {
-                availableDate: nextAvailableTimes.date,
-                "availableTime.isBooked": false,
+        const filter = {
+            "availableTime.time": nextAvailableTimes.time,
+        };
+    
+        const update = {
+            $set: {
+                "availableTime.$.userId": lowerPriorityUser._id,
+                "availableTime.$.userRole": lowerPriorityUser.role,
+                "availableTime.$.isBooked": true,
             },
-            {
-                $set: {
-                    "availableTime.$[element].userId": lowerPriorityUser._id,
-                    "availableTime.$[element].userRole": lowerPriorityUser.role,
-                    "availableTime.$[element].isBooked": true,
-                },
-            },
-            {
-                arrayFilters: [
-                    {
-                        "element.isBooked": false,
-                    },
-                ],
-            }
-        );
+        };
+    
+        await Event.updateOne(filter, update);
 
         // convert date to this format January 13, 2024
         const dateObject = new Date(date)
@@ -42,7 +35,7 @@ const findNextAvailableTime = async (time: string, date: string, lowerPriorityUs
         const formattedDate = dateObject.toLocaleDateString('en-US', options);
 
         const dateObjectTime = new Date(nextAvailableTimes.time)
-        const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+        const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Africa/Lagos' };
         const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
 
         const htmlMessage = `
@@ -68,13 +61,10 @@ const findNextAvailableTime = async (time: string, date: string, lowerPriorityUs
 
         await sendEmail(emailOptions);
 
-        NextResponse.json(
-            {
-                message: "Appointment successfully booked",
-            },
-            { status: 201 }
-        );
-    } else {
+        return;
+    }
+
+    if (!nextAvailableTimes) {
         // If no next available time is found, check other dates in the collection
         const otherDates = await Event.find({ availableDate: { $ne: date } });
 
@@ -113,7 +103,7 @@ const findNextAvailableTime = async (time: string, date: string, lowerPriorityUs
                 const formattedDate = dateObject.toLocaleDateString('en-US', options);
 
                 const dateObjectTime = new Date(nextOtherAvailableTime.time);
-                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Africa/Lagos' };
                 const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
 
                 const htmlMessage = `
@@ -139,14 +129,12 @@ const findNextAvailableTime = async (time: string, date: string, lowerPriorityUs
 
                 await sendEmail(emailOptions);
 
-                NextResponse.json(
+                return NextResponse.json(
                     {
                         message: "Appointment successfully booked",
                     },
                     { status: 201 }
                 );
-
-                return;
             }
         }
 
@@ -170,13 +158,15 @@ const findNextAvailableTime = async (time: string, date: string, lowerPriorityUs
 
         await sendEmail(noAvailableTimeOptions);
 
-        NextResponse.json(
-            {
-                message: "No available time slots at the moment",
-            },
-            { status: 400 }
-        );
+        return;
     }
+
+    NextResponse.json(
+        {
+            message: "Cannot book appointmont",
+        },
+        { status: 400 }
+    );
 };
 
 
@@ -260,13 +250,15 @@ const bookPriority = async (date: string, time: string, userRole: string, userId
             const lowerPriorityUser = await User.findById(bookedTime.userId);
             const higherPriorityUser = await User.findById(userId);
 
+            findNextAvailableTime(time, date, lowerPriorityUser)
+
             // convert date to this format January 13, 2024
             const dateObject = new Date(date)
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = dateObject.toLocaleDateString('en-US', options);
 
             const dateObjectTime = new Date(date)
-            const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+            const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Africa/Lagos' };
             const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
 
             if (lowerPriorityUser) {
@@ -319,8 +311,6 @@ const bookPriority = async (date: string, time: string, userRole: string, userId
                 await sendEmail(emailOptions);
             }
 
-            findNextAvailableTime(time, date, lowerPriorityUser)
-
             NextResponse.json(
                 {
                     message: "Appointment successfully booked",
@@ -342,7 +332,7 @@ export async function POST(req: Request) {
     try {
         await connectToDB();
         const { date, time, userId } = await req.json();
-
+        console.log(date, time)
         const userExists = await User.findOne({ _id: userId });
 
         if (!userExists) {
@@ -441,6 +431,13 @@ export async function POST(req: Request) {
                     const lowerPriorityUsers = await bookPriority(date, time, userRole, userId);
 
                     console.log(lowerPriorityUsers)
+
+                    return NextResponse.json(
+                        {
+                            message: "Successfully Booked Appointment",
+                        },
+                        { status: 201 }
+                    );
                 }
 
             } else {

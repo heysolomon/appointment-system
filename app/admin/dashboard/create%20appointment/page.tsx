@@ -83,10 +83,23 @@ const BookAppointment = () => {
 
   const createEvent = async (values: z.infer<typeof createEventSchema>) => {
     dispatch(createEventsStart())
+
+    const dateObject = new Date(values.date);
+
+    console.log(values.date)
+    const options = { timeZone: 'Africa/Lagos', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = dateObject.toLocaleDateString('en-US', options);
+
+    const newValues = {
+      ...values,
+      date: formattedDate
+    }
+    console.log(newValues)
+
     try {
       const res = await fetch('/api/admin/appointment', {
         method: 'POST',
-        body: JSON.stringify(values)
+        body: JSON.stringify(newValues)
       })
 
       const data = await res.json();
