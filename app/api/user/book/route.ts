@@ -444,33 +444,11 @@ export async function POST(req: Request) {
                 }
 
             } else {
-                // If the time doesn't exist, create a new eventTime
-                existingEvent.availableTime.push({
-                    time,
-                    userId,
-                    userRole,
-                    isBooked: true,
-                });
-
-                // Save the changes to the existingEvent
-                await existingEvent.save();
-
-                // Send email to user about booked appointment
-                const userDoc = await User.findById(userId);
-                if (userDoc) {
-                    const emailOptions = {
-                        to: userDoc.email,
-                        subject: "Appointment Booked",
-                        text: `Your appointment has been booked for ${date} at ${time}`,
-                    };
-                    await sendEmail(emailOptions);
-                }
-
                 return NextResponse.json(
                     {
-                        message: "Appointment successfully booked",
+                        message: "Time is unavailable",
                     },
-                    { status: 201 }
+                    { status: 400 }
                 );
             }
         } else {
