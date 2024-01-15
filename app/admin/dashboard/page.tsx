@@ -3,12 +3,36 @@
 import UpcomingAppoinments from '@/components/dashboard/upcoming_appointments/page'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ReduxState } from '@/lib/redux'
+import { getEventsFailure, getEventsStart, getEventsSuccess } from '@/lib/redux/features/admin/eventSlice'
 import { NoDataImage } from '@/public/assets/images/images'
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Dashboard = () => {
     const { adminData } = useSelector((state: ReduxState) => state.admin);
+    const { events } = useSelector((state: ReduxState) => state.events);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const getAllEvents = async (): Promise<void> => {
+            dispatch(getEventsStart())
+            try {
+                const res = await fetch('/api/admin/appointment', {
+                    method: 'GET',
+                  })
+
+                  const data = await res.json();
+
+                dispatch(getEventsSuccess(data.events))
+            } catch (err) {
+                dispatch(getEventsFailure())
+                console.log(err)
+            }
+        }
+
+        getAllEvents()
+    }, [])
     return (
         <div className='p-5 md:p-10 h-max'>
             <div>
