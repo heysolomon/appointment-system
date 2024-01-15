@@ -36,6 +36,7 @@ export async function POST(req: Request) {
             user: {
                 email: userExists.email,
                 name: userExists.name,
+                id: userExists._id,
             }
         }, { status: 200 })
     } catch (err) {
