@@ -5,6 +5,7 @@ export interface IEvent extends Document {
     availableTime: Array<{
         time: string;
         userId?: string;
+        userName?: string;
         userRole?: string;
         isBooked?: boolean;
         isConfirmed?: boolean;
@@ -25,6 +26,7 @@ const EventSchema = new Schema<IEvent>({
                 required: [true, "Time is required"]
             },
             userId: String,
+            userName: String,
             userRole: String,
             isBooked: {
                 type: Boolean,

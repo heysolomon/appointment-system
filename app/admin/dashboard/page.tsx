@@ -1,19 +1,27 @@
 'use client'
 
-import UpcomingAppoinments from '@/components/dashboard/upcoming_appointments/page'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ReduxState } from '@/lib/redux'
-import { getEventsFailure, getEventsStart, getEventsSuccess } from '@/lib/redux/features/admin/eventSlice'
-import { NoDataImage } from '@/public/assets/images/images'
+import { getEventsFailure, getEventsStart, getEventsSuccess, getUpcomingEventsFailure, getUpcomingEventsStart, getUpcomingEventsSuccess } from '@/lib/redux/features/admin/eventSlice'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Dashboard = () => {
     const { adminData } = useSelector((state: ReduxState) => state.admin);
-    const { events } = useSelector((state: ReduxState) => state.events);
+    const { events, upcomingEvent } = useSelector((state: ReduxState) => state.events);
 
     const dispatch = useDispatch();
+
+    const upcominAppointments = () => {
+        const bookedEvents = events.filter((event) =>
+            event.availableTime.some((eventTime) => eventTime.isBooked)
+        );
+
+        if (bookedEvents.length > 0) {
+            dispatch(getUpcomingEventsSuccess(bookedEvents))
+        }
+    }
 
     useEffect(() => {
         const getAllEvents = async (): Promise<void> => {
@@ -33,6 +41,26 @@ const Dashboard = () => {
         }
 
         getAllEvents()
+    }, [])
+
+    useEffect(() => {
+        const getUpcomingEvents = async (): Promise<void> => {
+            dispatch(getUpcomingEventsStart())
+            try {
+                const res = await fetch('/api/admin/upcoming', {
+                    method: 'GET',
+                })
+
+                const data = await res.json();
+
+                dispatch(getUpcomingEventsSuccess(data.events))
+            } catch (err) {
+                dispatch(getUpcomingEventsFailure())
+                console.log(err)
+            }
+        }
+
+        getUpcomingEvents()
     }, [])
     return (
         <div className='p-5 md:p-10 h-max'>
@@ -82,7 +110,42 @@ const Dashboard = () => {
                     </div>
                 </TabsContent>
                 <TabsContent value="upcoming" className=''>
-                    <UpcomingAppoinments />
+                    {
+                        upcomingEvent.length === 0 ? <h1 className="text-dark_green-500 font-semibold text-xl mb-5">No Events currently</h1> : <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[200px]">Booked Date</TableHead>
+                                    <TableHead>Booking Details</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {upcomingEvent.map((event) => {
+                                    const dateObject = new Date(event.availableDate);
+                                    return (
+                                        <TableRow key={event._id}>
+                                            <TableCell className="font-medium">{dateObject.toDateString()}</TableCell>
+                                            {event.availableTime.map((time) => {
+                                                const dateObjectTime = new Date(time.time)
+                                                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+                                                const formattedTime = dateObjectTime.toLocaleTimeString('en-US', timeOptions);
+
+                                                return (
+                                                    <TableCell key={event._id} className='text-xs'>
+                                                        <div key={time._id} className='w-[20%] pb-3 mb-3 border-b border-b-slate-300 pr-3'>
+                                                            <p className='capitalize'>Name: {time.userName}</p>
+                                                            <p>Time: {formattedTime}</p>
+                                                            <p className='capitalize'>User: {time.userRole}</p>
+                                                        </div>
+                                                    </TableCell>
+                                                )
+                                            })}
+                                        </TableRow>
+
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    }
                 </TabsContent>
             </Tabs>
         </div>
