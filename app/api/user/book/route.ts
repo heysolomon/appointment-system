@@ -365,7 +365,7 @@ export async function POST(req: Request) {
             if (existingEvent.availableTime.some((eventTime: { time: any; }) => eventTime.time === time)) {
                 // This checks if the user that's trying to book and event has booked before
                 const userAlreadyBooked = existingEvent.availableTime.some(
-                    (eventTime: { isBooked: boolean; userId: any; role: any; }) => eventTime.userId === userId
+                    (eventTime: { isBooked: boolean; userId: any; userRole: any; }) => eventTime.userId === userId && eventTime.userRole === userRole
                 );
                 console.log("User already booked?", userAlreadyBooked)
 
