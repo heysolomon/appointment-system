@@ -18,9 +18,7 @@ const Dashboard = () => {
             <Tabs defaultValue="upcoming" className="w-full h-max mt-5">
                 <TabsList className='grid grid-cols-2 h-min lg:inline-flex'>
                     <TabsTrigger value="create_event" className="px-5 text-[10px] md:text-sm">Created Events</TabsTrigger>
-                    <TabsTrigger value="requested" className="px-5 text-[10px] md:text-sm">Requested Appointments</TabsTrigger>
-                    <TabsTrigger value="upcoming" className="px-5 text-[10px] md:text-sm">Confirmed Appointments</TabsTrigger>
-                    <TabsTrigger value="canceled" className="px-5 text-[10px] md:text-sm">Canceled Appointments</TabsTrigger>
+                    <TabsTrigger value="upcoming" className="px-5 text-[10px] md:text-sm">Upcoming Appointments</TabsTrigger>
                 </TabsList>
                 <TabsContent value="create_event" className=''>
                     <div className='p-5'>
@@ -31,7 +29,6 @@ const Dashboard = () => {
                 <TabsContent value="upcoming" className=''>
                     <UpcomingAppoinments />
                 </TabsContent>
-                <TabsContent value="canceled">canceled appointments goes here</TabsContent>
             </Tabs>
         </div>
     )
