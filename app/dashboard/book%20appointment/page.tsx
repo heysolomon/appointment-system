@@ -142,7 +142,7 @@ const BookAppointment = () => {
       <div className='border-r border-r-slate-400 h-full py-5 px-10 hidden md:block'>
         <h1 className="text-dark_green-500 font-semibold text-xl">Book appointment with VC</h1>
         <p className='text-sm text-dark_green-600'>Please enter booking info</p>
-        <div className='w-[80%] max-w-[500px]'>
+        <div className='w-[70%] max-w-[500px]'>
           <AnimatedImage />
         </div>
       </div>
