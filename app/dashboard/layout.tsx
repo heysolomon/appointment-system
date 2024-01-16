@@ -32,7 +32,7 @@ const Layout = ({ children }: DLayout) => {
                                 <li>Book Appointment</li>
                             </Link>
 
-                            <Link href='/auth/login' className={`hover:underline mr-5`}>
+                            <Link href='/login' className={`hover:underline mr-5`}>
                                 <li className='bg-tea_green-500 text-dark_green-200 border border-dark_green-500 py-2 px-5 rounded-xl flex items-center hover:shadow-md hover:cursor-pointer'>Logout</li>
                             </Link>
 
@@ -50,7 +50,7 @@ const Layout = ({ children }: DLayout) => {
                                         <li>Book Appointment</li>
                                     </Link>
 
-                                    <Link href='/auth/login' className={`hover:underline mr-5`}>
+                                    <Link href='/login' className={`hover:underline mr-5`}>
                                         <li className='bg-tea_green-500 text-dark_green-200 border border-dark_green-500 py-2 px-5 rounded-xl flex items-center hover:shadow-md hover:cursor-pointer'>Logout</li>
                                     </Link>
                                 </ul>
